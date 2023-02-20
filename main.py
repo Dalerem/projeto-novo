@@ -1,5 +1,6 @@
 import aspose.pdf as pdf
 from PyPDF2 import PdfReader
+
 class Interface:
 
     df = "cliente.pdf"
