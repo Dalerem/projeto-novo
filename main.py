@@ -1,15 +1,29 @@
 import aspose.pdf as pdf
-
+from PyPDF2 import PdfReader
 class Interface:
 
-    # Simulação de processos do site de requisição
-    processos = [10222021, 20322022, 30452023, 40372019, 50402020, 60332018, 70112021, 80672016]
+    df = "cliente.pdf"
+
+    # Função logar
+    def login_pessoas(self):
+        nome = input('Qual seu nome?\n')
+        senha = input('Qual sua senha?\n')
+
+        print('login realizado!')
+
+    def ler_pdf(self):
+        ler = PdfReader(self.df)
+        number_of_pages = len(ler.pages)
+        pagina = ler.pages[0]
+        texto = pagina.extract_text()
+
+        print(texto)
 
     # Função converte
     def converte(self):
 
         # Carrega o documento PDF
-        tabela = pdf.Document("cliente.pdf")
+        tabela = pdf.Document(self.df)
 
         # Inicializa o ExcelSaveOptions
         excelSaveOptions = pdf.ExcelSaveOptions()
@@ -19,28 +33,16 @@ class Interface:
 
         print("Processo de conversao completo!")
 
-    # Função logar
-    def login_pessoas(self):  # Login
-        nome = input('Qual seu nome?\n')
-        senha = input('Qual sua senha?\n')
-
-        print('login realizado!')
-
-    # Função listar
-    def lista_processo(self):
-        for i, processo in enumerate(self.processos):
-            print(i, processo)
-
     # Função de escolha
     def loop(self):
         while True:
-            cmd = input('\n1 - Login\n2 - Converter\n3 - Listar processos\n0 - Sair\n')
+            cmd = input('\n1 - Login\n2 - Ler o pdf\n3 - Converter para excel\n0 - Sair\n')
             if cmd == '1':
                 self.login_pessoas()
             elif cmd == '2':
-                self.converte()
+                self.ler_pdf()
             elif cmd == '3':
-                self.lista_processo()
+                self.converte()
             elif cmd == '0':
                 print("Programa finalizado!")
                 break
