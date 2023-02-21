@@ -1,17 +1,15 @@
 import aspose.pdf as pdf
 from PyPDF2 import PdfReader
+import requests
 
 class Interface:
 
-    df = "cliente.pdf"
+    # Construtor
+    def __init__(self):
+        self.df = "cliente.pdf"
+        self.link = "https://esaj.tjsp.jus.br/esaj/portal.do?servico=740000"
 
-    # Função logar
-    def login_pessoas(self):
-        nome = input('Qual seu nome?\n')
-        senha = input('Qual sua senha?\n')
-
-        print('login realizado!')
-
+    # Função ler PDF
     def ler_pdf(self):
         ler = PdfReader(self.df)
         number_of_pages = len(ler.pages)
@@ -34,16 +32,31 @@ class Interface:
 
         print("Processo de conversao completo!")
 
+    # Função ler site
+    def ler_site(self):
+        site = requests.get(self.link)
+
+        print(site.text)
+
+    # Função logar
+    def login_pessoas(self):
+        nome = input('Qual seu nome?\n')
+        senha = input('Qual sua senha?\n')
+
+        print('login realizado!')
+
     # Função de escolha
     def loop(self):
         while True:
-            cmd = input('\n1 - Login\n2 - Ler o pdf\n3 - Converter para excel\n0 - Sair\n')
+            cmd = input('\n1 - Ler o pdf\n2 - Converter para excel\n3 - Ler site\n4 - login\n0 - Sair\n')
             if cmd == '1':
-                self.login_pessoas()
-            elif cmd == '2':
                 self.ler_pdf()
-            elif cmd == '3':
+            elif cmd == '2':
                 self.converte()
+            elif cmd == '3':
+                self.ler_site()
+            elif cmd == '4':
+                self.login_pessoas()
             elif cmd == '0':
                 print("Programa finalizado!")
                 break
