@@ -1,10 +1,11 @@
 import aspose.pdf as pdf
 from PyPDF2 import PdfReader
 import requests
+import scrapy
 
 class Interface:
 
-    # Construtor
+    # Função Construtor
     def __init__(self):
         self.df = "cliente.pdf"
         self.link = "https://esaj.tjsp.jus.br/esaj/portal.do?servico=740000"
@@ -36,7 +37,7 @@ class Interface:
     def ler_site(self):
         site = requests.get(self.link)
 
-        print(site.text)
+        print(site.content)
 
     # Função logar
     def login_pessoas(self):
