@@ -1,7 +1,6 @@
 import time
 import aspose.pdf as pdf
 from PyPDF2 import PdfReader
-import requests
 import pandas as pd
 from playwright.sync_api import sync_playwright
 
@@ -9,22 +8,31 @@ class Interface:
 
     # Função Construtor
     def __init__(self):
+        # Documento cliente em pdf
         self.df = "cliente.pdf"
-        self.link = "https://esaj.tjsp.jus.br/esaj/portal.do?servico=740000"
+        # Url da pagina login
         self.url = "https://esaj.tjsp.jus.br/sajcas/login?service=https%3A%2F%2Fesaj.tjsp.jus.br%2Fesaj%2Fj_spring_cas_security_check"
+        # Dataframe do documento login em xlsx
         self.df2 = pd.read_excel("login.xlsx")
+        # Url da pagina consulta de processo do 1º grau
+        self.url2 = "https://esaj.tjsp.jus.br/cpopg/open.do"
+        # Dataframe do documento processo em xlsx
+        self.df3 = pd.read_excel("processo.xlsx")
 
     # Função ler PDF
     def ler_pdf(self):
+        # Abrir o PDF
         ler = PdfReader(self.df)
+        # Acessar a primeira pagina do PDF
         pagina = ler.pages[0]
+        # Ler o conteudo
         texto = pagina.extract_text()
 
         print(texto)
+        print("Sucesso!")
 
-    # Função converte
+    # Função converte o PDF para Excel
     def converte(self):
-
         # Carrega o documento PDF
         tabela = pdf.Document(self.df)
 
@@ -36,21 +44,17 @@ class Interface:
 
         print("Processo de conversao completo!")
 
-    # Função ler site
-    def ler_site(self):
-        site = requests.get(self.link)
-
-        print(site.content)
-
-    # Função logar
+    # Função faz o login no site do tjsp
     def login(self):
-
         for index, row in self.df2.iterrows():
             print("index: " + str(index) + " E o nome do fulano é " + str(row["SENHA"]))
 
             with sync_playwright() as p:
+                # Abre o navegador
                 browser = p.chromium.launch(headless=False)
+                # Cria uma pagina nova
                 pagina = browser.new_page()
+                # Acessa a url
                 pagina.goto(self.url)
 
                 time.sleep(2)
@@ -59,24 +63,50 @@ class Interface:
                 # Preenche o campo SENHA
                 pagina.fill("#passwordForm", str(row["SENHA"]))
 
-                # Clica no botão enviar
+                # Clica no botão buscar
                 #pagina.click("")
 
                 time.sleep(3)
                 browser.close()
 
+    # Função numero do processo
+    def processos(self):
+        for index, row in self.df3.iterrows():
+            print("index: " + str(index) + " E o nome do fulano é " + str(row["PROCESSO"]))
+
+            with sync_playwright() as p:
+                # Abre o navegador
+                browser2 = p.chromium.launch(headless=False)
+                # Cria uma pagina nova
+                pagina2 = browser2.new_page()
+                # Acessa a url2
+                pagina2.goto(self.url2)
+
+                # Espera 2 seguntos para preencher o campo
+                time.sleep(2)
+                # Preenche o campo numero do processo
+                pagina2.fill("#numeroDigitoAnoUnificado", str(row["PROCESSO"]))
+
+                # Clica no botão consultar
+                #pagina2.click("#botaoConsultarProcessos")
+
+                # Espera 3 segundos para fechar o browser
+                time.sleep(3)
+                # Fecha a browser
+                browser2.close()
+
     # Função de escolha
     def loop(self):
         while True:
-            cmd = input('\n1 - Ler o pdf\n2 - Converter para excel\n3 - Ler site\n4 - login\n0 - Sair\n')
+            cmd = input('\n1 - Ler o pdf\n2 - Converter para excel\n3 - login\n4 - Numero do processo\n0 - Sair\n')
             if cmd == '1':
                 self.ler_pdf()
             elif cmd == '2':
                 self.converte()
             elif cmd == '3':
-                self.ler_site()
-            elif cmd == '4':
                 self.login()
+            elif cmd == '4':
+                self.processos()
             elif cmd == '0':
                 print("Programa finalizado!")
                 break
