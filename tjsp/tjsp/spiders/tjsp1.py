@@ -9,3 +9,4 @@ class Tjsp1Spider(scrapy.Spider):
             yield {
                 'titulos': consultas.css('.esajCelulaDescricaoServicos a::text').get()
             }
+

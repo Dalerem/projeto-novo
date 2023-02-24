@@ -1,7 +1,6 @@
 import aspose.pdf as pdf
 from PyPDF2 import PdfReader
 import requests
-import scrapy
 
 class Interface:
 
@@ -13,7 +12,6 @@ class Interface:
     # Função ler PDF
     def ler_pdf(self):
         ler = PdfReader(self.df)
-        number_of_pages = len(ler.pages)
         pagina = ler.pages[0]
         texto = pagina.extract_text()
 
