@@ -5,7 +5,6 @@ import pandas as pd
 from playwright.sync_api import sync_playwright
 
 class Interface:
-
     # Função Construtor
     def __init__(self):
         # Documento cliente em pdf
@@ -44,7 +43,7 @@ class Interface:
 
         print("Processo de conversao completo!")
 
-    # Função faz o login no site do tjsp
+    # Função faz o login no site
     def login(self):
         for index, row in self.df2.iterrows():
             print("index: " + str(index) + " E o nome do fulano é " + str(row["SENHA"]))
@@ -64,7 +63,7 @@ class Interface:
                 pagina.fill("#passwordForm", str(row["SENHA"]))
 
                 # Clica no botão buscar
-                #pagina.click("")
+                #pagina.click("#pbEntrar")
 
                 time.sleep(3)
                 browser.close()
@@ -72,7 +71,7 @@ class Interface:
     # Função numero do processo
     def processos(self):
         for index, row in self.df3.iterrows():
-            print("index: " + str(index) + " E o nome do fulano é " + str(row["PROCESSO"]))
+            print("index: " + str(index) + " E o numero do processo é: " + str(row["PROCESSO"]))
 
             with sync_playwright() as p:
                 # Abre o navegador
