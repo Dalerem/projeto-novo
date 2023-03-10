@@ -86,6 +86,7 @@ class Interface:
                 time.sleep(2)
                 # Preenche o campo numero do processo
                 pagina2.fill("#numeroDigitoAnoUnificado", str(row["PROCESSO"]))
+                # Peenche o campo numero unificado
                 pagina2.fill("#foroNumeroUnificado", str(row["TERMINACAO"]))
 
                 # Clica no botão consultar
