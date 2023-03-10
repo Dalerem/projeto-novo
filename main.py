@@ -71,7 +71,8 @@ class Interface:
     # Função numero do processo
     def processos(self):
         for index, row in self.df3.iterrows():
-            print("index: " + str(index) + " E o numero do processo é: " + str(row["PROCESSO"]))
+            print("index: " + str(index) + " E o numero do processo é: " + str(row["PROCESSO"]) +
+                  "Com terminacao: " + str(row["TERMINACAO"]))
 
             with sync_playwright() as p:
                 # Abre o navegador
@@ -85,6 +86,7 @@ class Interface:
                 time.sleep(2)
                 # Preenche o campo numero do processo
                 pagina2.fill("#numeroDigitoAnoUnificado", str(row["PROCESSO"]))
+                pagina2.fill("#foroNumeroUnificado", str(row["TERMINACAO"]))
 
                 # Clica no botão consultar
                 #pagina2.click("#botaoConsultarProcessos")
